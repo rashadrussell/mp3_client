@@ -1,0 +1,26 @@
+<div class="taskDetail" ng-controller='TaskDetailController'>    
+  <section class="row">
+  	<div class="large-10 columns">
+  		<h2>Task</h2>
+  	</div>
+  	<div class="large-2 columns">
+  		<a href="#/tasks/{{task._id}}/edit" class="button success tiny radius">Edit Task</a>
+  	</div>
+  </section>
+
+  <section class="row">
+  	<div class="large-7 columns">
+  		<div class="task-detail">
+  			<h3>{{task.name}}</h3>
+  			<p>{{task.description}}</p>
+  		</div> 
+  	</div>
+  	<div class="large-5 columns">
+  		<div class="meta-data">
+  			<h3>Deadline: {{deadline}}</h3>
+  			<p>Completed: {{task.completed}}</p>
+  			<p>Assigned to: {{task.assignedUserName}}</p>
+  		</div>
+  	</div>
+  </section>
+</div>

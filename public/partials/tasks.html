@@ -1,0 +1,76 @@
+<div class="tasks" ng-controller='TasksController'>	
+  
+  <section class="viewHeader row">	
+    <div class="large-9 columns">
+      <h2>Tasks</h2>
+    </div>
+    
+    <div class="large-3 columns">
+      <a href="#/tasks/addTask" class="button success tiny radius">Add Task</a>
+    </div>
+  </section>
+
+  <section class="filteringOptions row">  
+    <div class="large-5 columns">
+      <input ng-model="status" ng-click="updateStatus($event)" type="radio" name="taskStatus" value="pending" id="pendingTasks"><label for="pendingTasks">Pending</label>
+      <input ng-model="status" ng-click="updateStatus($event)" type="radio" name="taskStatus" value="completed" id="completedTasks"><label for="completedTasks">Completed</label>
+      <input ng-model="status" ng-click="updateStatus($event)" type="radio" name="taskStatus" value="all" id="allTasks"><label for="allTasks">All</label>
+    </div>
+    
+    <div class="large-4 columns">
+      <label> Sort By:
+        <select>
+          <option>dateCreated</option>
+          <option>deadline</option>
+          <option>name</option>
+          <option>assignedUserName</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="large-3 columns">
+      <div class="sortOrder">
+
+        <div class="ascending">
+          <input type="radio" name="sortOrder" value="ascending" id="ascendingTasks">
+          <label for="ascendingTasks">Ascending</label>
+        </div>
+
+        <div class="descending">
+          <input type="radio" name="sortOrder" value="descending" id="descendingTasks">
+          <label for="descendingTasks">Descending</label>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="pagination row">
+    <div class="large-10 columns button-container prev-button">
+      <a ng-hide="hidePrev" ng-click="prevPage(eve)" class="button tiny radius">Prev</a>
+    </div>
+
+    <div class="large-2 columns button-container next-button">
+      <a ng-hide="hideNext" ng-click="nextPage(eve)" class="button tiny radius">Next</a>
+    </div>
+  </section>
+
+  <section>
+    <ul class="list">
+      <li class="row" ng-repeat="task in currTasks ">
+          <div class="large-5 columns">
+            <p class="userName">
+              <a ng-href="#/tasks/{{task._id}}">{{task.name}}</a>
+            </p>
+          </div>
+          <div class="large-4 columns">
+            <p class="taskDeadline">Deadline: {{ task.deadline | date:'MM/dd/yyyy' }}</p>
+            <p class="assignedUser">Assigned to {{task.assignedUserName}}</p>
+          </div>
+          <div class="large-2 columns">
+            <a class="button tiny alert delete radius" ng-click="removeTask($index)">Delete</a>
+          </div>
+      </li>
+    </ul>
+  </section>
+</div>

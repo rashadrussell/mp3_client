@@ -1,0 +1,41 @@
+<div class="detail" ng-controller='UserDetailController'>
+
+	<section class="row">
+		<h3>User Profile</h3>
+	</section>
+
+	<section class="row">
+		<div class="large-8 columns">
+			<h4>{{user.name}}</h4>
+		</div>
+
+		<div class="large-4 columns">
+			<h4>{{user.email}}</h4>
+		</div>
+	</section>
+
+	<section class="row">
+		<h4>Pending Tasks</h4>
+	</section>
+
+	<section class="row">
+		<ul>
+			<li class="row" ng-repeat="task in tasks">
+				<div class="large-4 columns">
+					<p>
+						<a ng-href="#/tasks/{{task._id}}">{{task.name}}</a>
+					</p>
+				</div>
+				<div class="large-5 columns">
+					<p>Deadline: {{task.deadline | date:'MMM dd, yyyy'}}</p>
+				</div>
+				<div class="large-3 columns">
+					<p>
+						<a ng-href="./users/{{task._id}}" class="button tiny radius">Completed</a>
+					</p>
+				</div>
+			</li>
+		</ul>
+	</section>
+
+</div>

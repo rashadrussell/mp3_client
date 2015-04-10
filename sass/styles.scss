@@ -4,3 +4,42 @@
 @import "variables";
 @import "mixins";
 @import "base";
+
+
+header {
+	margin-bottom: 20px;
+
+	.title {
+		padding: 15px;
+		background: #eee;
+		border: solid 1px #ddd;
+		text-align: center;
+	}
+}
+
+main {
+	.sidebar {
+		.button {
+			display: block;
+		}
+	}
+
+	.list li {
+		border-top: solid 1px #ddd;
+		padding-top: 15px;
+
+		.userEmail {
+			font-style: italic;
+		}
+	}
+
+	.tasks {
+		.sortOrder {
+			.ascending, .descending {
+				display: block;
+			}
+		}
+
+	}
+
+}

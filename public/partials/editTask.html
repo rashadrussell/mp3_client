@@ -1,0 +1,54 @@
+<div class="editTask" ng-controller='EditTaskController'>    
+  <section class="viewHeader row">	
+    <div class="large-9 columns">
+      <h2>Edit Task</h2>
+    </div>
+  </section>
+
+  <section class="content">
+  	<div class="row">
+  		<div class="large-6 columns">
+  			<label>Name <span class="required">*</span>
+  				<input type="text" ng-model="name" />
+  			</label>
+  		</div>
+  	</div>
+  	<div class="row">
+  		<div class="large-6 columns">
+  			<label>Description
+  				<input type="text" ng-model="description" />
+  			</label>
+  		</div>
+  	</div>
+  	<div class="row">
+  		<div class="large-6 columns">
+  			<label>Deadline <span class="required">*</span>
+  				<datepicker date-format="MM/dd/yyyy">
+            <input ng-model="deadline" type="text"/>
+          </datepicker>
+  			</label>
+  		</div>
+  	</div>
+  	<div class="row">
+  		<div class="large-6 columns">
+  			<label>Assigned User
+  				<select ng-model="users.value" ng-options="user.name for user in users.values | orderBy:'name'">
+            <option value="">Unassigned</option>
+          </select>
+  			</label>
+  		</div>
+  	</div>
+  	<div class="row">
+  		<div class="large-6 columns">
+         
+  				<input ng-model="completed" ng-value="true" type="radio" name="completed" /> Yes 
+  				<input ng-model="completed" ng-value="false" type="radio" name="completed" /> No
+  		</div>
+  	</div>
+  	<div class="row">
+  		<div class="large-6 columns ">
+  			<button ng-click="editTask(name, description, deadline, users.value, completed)" class="tiny radius">Update</button>
+  		</div>
+  	</div>
+  <section>
+</div>

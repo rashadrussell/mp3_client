@@ -1,0 +1,47 @@
+<div class="addTask" ng-controller='AddTaskController'>	
+  
+  <section class="viewHeader row">	
+    <div class="large-9 columns">
+      <h2>Add Task</h2>
+    </div>
+  </section>
+
+  <section class="content">
+  	<div class="row">
+  		<div class="large-6 columns">
+  			<label>Name <span class="required">*</span>
+  				<input type="text" ng-model="title" />
+  			</label>
+  		</div>
+  	</div>
+  	<div class="row">
+  		<div class="large-6 columns">
+  			<label>Description <span class="required">*</span>
+  				<input type="text" ng-model="description" />
+  			</label>
+  		</div>
+  	</div>
+  	<div class="row">
+  		<div class="large-6 columns">
+  			<label>Deadline <span class="required">*</span>
+  				<datepicker date-format="MM/dd/yyyy">
+            <input ng-model="deadline" type="text"/>
+          </datepicker>
+  			</label>
+  		</div>
+  	</div>
+  	<div class="row">
+  		<div class="large-6 columns">
+  			<label>Assigned User <span class="required">*</span>
+  				<select ng-model="user" ng-options="user.name for user in users"></select>
+  			</label>
+  		</div>
+  	</div>
+  	<div class="row">
+  		<div class="large-6 columns ">
+  			<button ng-click="addTask(title, description, deadline, user)" class="tiny radius">Send</button>
+  		</div>
+  	</div>
+  <section>
+
+</div>
