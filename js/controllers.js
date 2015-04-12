@@ -17,14 +17,17 @@ demoControllers.controller('UsersController', ['$scope', '$http', 'Users', funct
     $scope.users = data.data;
   });
 
-  $scope.removeUser = function(idx) {
-    var userID = $scope.users[idx]._id;
-
-    $scope.users.splice(idx, 1);
+  $scope.removeUser = function(rmUser) {
     
-    Users.remove(userID).
+    Users.remove(rmUser._id).
       success(function(data, status) {
-        console.log(data);
+
+        angular.forEach($scope.users, function(user, idx) {
+          if(user._id === rmUser._id) {
+            $scope.users.splice(idx, 1);
+          }
+        });
+        
     }).
     error(function(data, status) {
 
@@ -43,7 +46,7 @@ demoControllers.controller('UserDetailController', ['$scope', '$location', 'User
   Users.get(userID).
     success(function(data) {
       $scope.user = data.data;
-      console.log($scope.user);
+
       angular.forEach($scope.user.pendingTasks, function(taskID) {
         Tasks.get(taskID).
           success(function(data) {
@@ -81,74 +84,116 @@ demoControllers.controller('AddUserController', ['$scope', '$http', 'Users', fun
 }]);
 
 
-demoControllers.controller('TasksController', ['$scope', '$http', 'Tasks', '$window' , function($scope, $http,  Tasks, $window) {
+demoControllers.controller('TasksController', ['$scope', '$http', 'Tasks', '$window', '$routeParams', function($scope, $http,  Tasks, $window, $routeParams) {
 
-  $scope.start = 0;
-  $scope.end = 10;
+  $scope.skipAmount = 0;
+  $scope.whereClause = {};
+  $scope.query = ['where={}', 'limit=10', 'skip=0'];
+  $scope.status = "all";
 
-  Tasks.get().success(function(data) {
-    $scope.tasks = data.data;
-    $scope.currTasks = $scope.tasks.slice($scope.start, $scope.end);
-    $scope.hidePrev = true;
+  Tasks.get().
+    success(function(data) {
+      $scope.initTasksLen = data.data.length;
+      $scope.tasks = data.data.slice(0, 10);
+      $scope.skipAmount = 0;
 
-    if($scope.end >= $scope.tasks.length) {
-      $scope.hideNext = true;
-    }    
+      if($scope.skipAmount > $scope.initTasksLen) {
+        $scope.hideNext = true;
+      }
+      $scope.hidePrev = true;
+   
      
   });
 
-  $scope.status="all";
+  $scope.status = {"completed": false};
 
   $scope.updateStatus = function($event) {
+    var statusQuery;
+
     if($event.target.value === "completed") {
-      $scope.status = "compeleted";
+      $scope.whereClause['completed'] = true;
+      $scope.status = "completed";
     } else if($event.target.value === "pending") {
-      scope.status = "pending";
+      $scope.whereClause['completed'] = false;
+      $scope.status = "pending";
     } else {
-      scope.status = "all";
-    }
+      delete $scope.whereClause['completed'];
+      $scope.status = "all";
+    }    
+
+    statusQuery = JSON.stringify($scope.whereClause);
+    $scope.query[0] = "where="+statusQuery;
+
+    Tasks.get(id=null, $scope.query.join('&')).
+      success(function(data) {
+        $scope.tasks = data.data;
+        if($scope.skipAmount+10 > $scope.tasks.length) {
+          $scope.hideNext = true;
+        } else {
+          $scope.hideNext = false;
+        }
+      });
 
   };
 
 
-  $scope.page = 1;
+  $scope.page = 0;
   $scope.nextPage = function() {
-    
-    $scope.start += 10;
-    $scope.end += 10;
-    $scope.currTasks = $scope.tasks.slice($scope.start, $scope.end);
 
-    if($scope.start+10 > $scope.tasks.length) {
+    $scope.skipAmount+=10;
+    $scope.query[2] = "skip=" + $scope.skipAmount; 
+
+
+    Tasks.get(id=null, $scope.query.join('&')).
+      success(function(data) {
+        $scope.tasks = data.data;
+      });
+
+    if($scope.skipAmount+10 > $scope.initTasksLen) {
       $scope.hideNext = true;
-    } else {
       $scope.hidePrev = false;
-      
+    } else {
+      $scope.hideNext = false;
+      $scope.hidePrev = false;
     }
   };
+
+  
 
   $scope.prevPage = function() {
 
-    $scope.start -= 10;;
-    $scope.end -= 10;
-    $scope.currTasks = $scope.tasks.slice($scope.start, $scope.end);
+    $scope.skipAmount-=10;
+    $scope.query[2] = "skip=" + $scope.skipAmount; 
 
-    if($scope.start - 10 < 0) {
+    Tasks.get(id=null, $scope.query.join('&')).
+      success(function(data) {
+        $scope.tasks = data.data;
+      });
+
+    if($scope.skipAmount - 10 < 0) {
       $scope.hidePrev = true;
+      $scope.hideNext = false;
     } else {
+      $scope.hidePrev = false;
       $scope.hideNext = false;
     }
   };
 
-  $scope.removeTask = function(idx) {
+  $scope.removeTask = function(rmTask) {
 
-    Tasks.remove($scope.tasks[idx]._id).
-      success(function(status) {
-        $scope.tasks.splice(idx, 1);
-        console.log(status);
-      }).
-      error(function(status) {
+    Tasks.remove(rmTask._id).
+      success(function(data, status) {
 
-      }); 
+        angular.forEach($scope.tasks, function(task, idx) {
+          if(task._id === rmTask._id) {
+            $scope.tasks.splice(idx, 1);
+          }
+        });
+        
+    }).
+    error(function(data, status) {
+
+    });
   };
 
 
@@ -205,7 +250,6 @@ demoControllers.controller('EditTaskController', ['$scope', '$location', 'Tasks'
   
   var taskID = $location.path().split('/')[2];
 
-
   Tasks.get(taskID).
     success(function(data) {
       var deadline;
@@ -218,24 +262,29 @@ demoControllers.controller('EditTaskController', ['$scope', '$location', 'Tasks'
       $scope.description = $scope.task.description;
       $scope.deadline = deadline;
       $scope.completed = $scope.task.completed;
+
+
+
+
+      Users.get().success(function(data) {
+
+        var selectedUser = "";
+
+        angular.forEach(data.data, function(user) {
+          if(user.name === $scope.task.assignedUserName) {
+            selectedUser = user;
+          }
+        });
+
+        $scope.users = {
+          value: selectedUser || "",
+          values: data.data
+        }
+
+      });
     });
   
-    Users.get().success(function(data) {
-
-      var selectedUser = "";
-
-      angular.forEach(data.data, function(user) {
-        if(user.name === $scope.task.assignedUserName) {
-          selectedUser = user;
-        }
-      });
-
-      $scope.users = {
-        value: selectedUser || "",
-        values: data.data
-      }
-
-    });
+    
 
 
     $scope.editTask = function(name, description, deadline, user, completed) {

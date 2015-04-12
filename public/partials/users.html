@@ -12,7 +12,7 @@
 
   <section>
     <ul class="list">
-      <li class="row" ng-repeat="user in users">
+      <li class="row" ng-repeat="user in users | orderBy:'name'">
           <div class="large-5 columns">
             <p class="userName"><a ng-href="#/users/{{user._id}}">{{user.name}}</a></p>
           </div>
@@ -20,7 +20,7 @@
             <p class="userEmail">{{user.email}}</p>
           </div>
           <div class="large-2 columns">
-            <a class="button tiny alert delete radius" ng-click="removeUser($index)">Delete</a>
+            <a class="button tiny alert delete radius" ng-click="removeUser(user)">Delete</a>
           </div>
       </li>
     </ul>

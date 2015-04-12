@@ -33,10 +33,11 @@ angular.module('demoServices', [])
     })
     .factory('Tasks', function($http, $window) {      
         return {
-            get : function(id) {
+            get : function(id, parameters) {
                 var baseUrl = $window.sessionStorage.baseurl;
 
                 if(id) return $http.get(baseUrl+'/api/tasks/'+id);
+                if(parameters) return $http.get(baseUrl+'/api/tasks?'+parameters);
                 return $http.get(baseUrl+'/api/tasks');
             },
 

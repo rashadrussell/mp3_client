@@ -12,9 +12,11 @@
 
   <section class="filteringOptions row">  
     <div class="large-5 columns">
+      <form>
       <input ng-model="status" ng-click="updateStatus($event)" type="radio" name="taskStatus" value="pending" id="pendingTasks"><label for="pendingTasks">Pending</label>
       <input ng-model="status" ng-click="updateStatus($event)" type="radio" name="taskStatus" value="completed" id="completedTasks"><label for="completedTasks">Completed</label>
       <input ng-model="status" ng-click="updateStatus($event)" type="radio" name="taskStatus" value="all" id="allTasks"><label for="allTasks">All</label>
+      </form>
     </div>
     
     <div class="large-4 columns">
@@ -47,17 +49,17 @@
 
   <section class="pagination row">
     <div class="large-10 columns button-container prev-button">
-      <a ng-hide="hidePrev" ng-click="prevPage(eve)" class="button tiny radius">Prev</a>
+      <a ng-hide="hidePrev" ng-click="prevPage()" class="button tiny radius">Prev</a>
     </div>
 
     <div class="large-2 columns button-container next-button">
-      <a ng-hide="hideNext" ng-click="nextPage(eve)" class="button tiny radius">Next</a>
+      <a ng-hide="hideNext" ng-click="nextPage()" class="button tiny radius">Next</a>
     </div>
   </section>
 
   <section>
     <ul class="list">
-      <li class="row" ng-repeat="task in currTasks ">
+      <li class="row" ng-repeat="task in tasks">
           <div class="large-5 columns">
             <p class="userName">
               <a ng-href="#/tasks/{{task._id}}">{{task.name}}</a>
@@ -68,7 +70,7 @@
             <p class="assignedUser">Assigned to {{task.assignedUserName}}</p>
           </div>
           <div class="large-2 columns">
-            <a class="button tiny alert delete radius" ng-click="removeTask($index)">Delete</a>
+            <a class="button tiny alert delete radius" ng-click="removeTask(task)">Delete</a>
           </div>
       </li>
     </ul>
