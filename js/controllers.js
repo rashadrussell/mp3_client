@@ -263,9 +263,6 @@ demoControllers.controller('EditTaskController', ['$scope', '$location', 'Tasks'
       $scope.deadline = deadline;
       $scope.completed = $scope.task.completed;
 
-
-
-
       Users.get().success(function(data) {
 
         var selectedUser = "";
@@ -288,12 +285,11 @@ demoControllers.controller('EditTaskController', ['$scope', '$location', 'Tasks'
 
 
     $scope.editTask = function(name, description, deadline, user, completed) {
-      console.log(user);
       if(!user) {
         user = {_id: "", name: ""};
       }
 
-      var editedUser = {
+      var editedTask = {
         "id": $scope.task._id,
         "name": name,
         "description": description,
@@ -303,7 +299,7 @@ demoControllers.controller('EditTaskController', ['$scope', '$location', 'Tasks'
         "completed": completed
       }
 
-      Tasks.edit(editedUser).
+      Tasks.edit(editedTask).
         success(function(data, status) {
           console.log(data);
         });
